@@ -1,0 +1,65 @@
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .stars {
+      color: #f39c12;
+    }
+  </style>
+</head>
+<body>
+  <h1>All Businesses</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% businesses.each do |b| %>
+      <tr>
+        <td><a href="/businesses/<%= b.id %>"><%= b.name %></a></td>
+        <td><%= b.business_type %></td>
+        <td>
+          <span class="stars">
+            <% full_stars = b.rating.floor %> <% half_star = (b.rating -
+            full_stars >= 0.5) %> <% full_stars.times do %> &#9733; <% end %> <%
+            if half_star %> &#9734; <% end %>
+          </span>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</body>

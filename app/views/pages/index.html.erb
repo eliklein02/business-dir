@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Business Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+        }
+        header {
+            background-color: #6c757d;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .hero {
+            background-color: #d1ecf1;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #0c5460;
+            transition: color 0.3s ease;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #0c5460;
+            transition: color 0.3s ease;
+        }
+        .business-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .business-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1 1 calc(33.333% - 1rem);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .business-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .business-item h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .business-item p {
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #e2e3e5;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .cta p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .cta a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .cta a:hover {
+            color: #0056b3;
+        }
+        footer {
+            background-color: #6c757d;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Local Business Directory</h1>
+    </header>
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to Your Local Business Directory</h1>
+            <p>Discover the best local businesses in your area.</p>
+        </div>
+        <div class="business-list">
+            <!-- Business items will be dynamically loaded here -->
+        </div>
+        <div class="cta">
+            <p>Want to get your business listed in our directory? Email us at <a href="mailto:eliklein02@gmail.com">eliklein02@gmail.com</a> to get started!</p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Local Business Directory. All rights reserved.</p>
+    </footer>
+</body>
+</html>
