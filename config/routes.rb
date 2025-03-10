@@ -13,4 +13,6 @@ Rails.application.routes.draw do
   root "pages#index"
 
   get "businesses/:id" => "pages#show"
+
+  get "privacy_policy" => "pages#privacy_policy"
 end

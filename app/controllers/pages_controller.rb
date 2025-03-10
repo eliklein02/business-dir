@@ -2,6 +2,9 @@ class PagesController < ApplicationController
     def index
     end
 
+    def privacy_policy
+    end
+
     def show_businesses
         businesses = Business.all
         respond_to do |format|
