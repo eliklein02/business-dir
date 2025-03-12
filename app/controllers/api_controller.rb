@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-    # skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token, only: :whatsapp_webhook, if: -> { request.post? }
     VERIFY_TOKEN = "it_is_a_whatsapp_bot"
 
     def whatsapp_webhook
