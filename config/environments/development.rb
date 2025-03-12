@@ -19,6 +19,8 @@ Rails.application.configure do
 
 
   config.hosts << "192dnsserver.com"
+  config.hosts << "wa-bot.192dnsserver.com"
+
 
 
   # Enable/disable caching. By default caching is disabled.
