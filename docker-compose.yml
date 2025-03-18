@@ -14,7 +14,21 @@ services:
       - "5432:5432"
 
   whatsapp_bot:
-    build: .
+    build:
+      context: .
+      args:
+        ACCESS_TOKEN: ${ACCESS_TOKEN}
+        APP_ID: ${APP_ID}
+        APP_SECRET: ${APP_SECRET}
+        RECIPIENT_WAID: ${RECIPIENT_WAID}
+        VERSION: ${VERSION}
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
+        PHONE_NUMBER_ID: ${PHONE_NUMBER_ID}
+        RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+        POSTGRES_HOST: ${POSTGRES_HOST}
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     command: "./bin/rails server"
     environment:
       - RAILS_ENV=${RAILS_ENV}
