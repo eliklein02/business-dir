@@ -39,7 +39,6 @@ services:
       - APP_ID=${APP_ID}
       - APP_SECRET=${APP_SECRET}
       - RECIPIENT_WAID=${RECIPIENT_WAID}
-      - VERSION="22"
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PHONE_NUMBER_ID=${PHONE_NUMBER_ID}
       - TZ=America/New_York
