@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
   
   root "pages#index"
+  get "about" => "pages#about"
   get "privacy_policy" => "pages#privacy_policy"
   match "whatsapp_webhook" => "api#whatsapp_webhook", via: [:get, :post]
 end

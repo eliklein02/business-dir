@@ -53,8 +53,6 @@ Rails.application.configure do
 
   config.hosts << "192dnsserver.com"
   config.hosts << "wa-bot.192dnsserver.com"
-  
-
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
