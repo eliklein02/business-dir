@@ -20,6 +20,8 @@ Rails.application.configure do
 
   config.hosts << "192dnsserver.com"
   config.hosts << "wa-bot.192dnsserver.com"
+  config.hosts << "yearly-nearby-bear.ngrok-free.app"
+
 
 
 

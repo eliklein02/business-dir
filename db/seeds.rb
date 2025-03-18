@@ -7,19 +7,17 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-trades = ["Plumber", "Electrician", "Carpenter", "Painter", "Mechanic", "Chef", "Teacher", "Doctor", "Lawyer", "Engineer"]
-names = ["John Doe", "Jane Smith", "Alice Johnson", "Robert Brown", "Michael Davis", "Emily Wilson", "David Martinez", "Sarah Lee", "Daniel White", "Laura Harris"]
-zip_codes = ["10001", "90210", "33101", "60601", "73301", "94101", "02101", "30301", "48201", "70112"]
+businesses = [
+    { name: "John's Electrical", address: "860 E. 27th st, Brooklyn, NY", business_type: 0, rating: 4.5 },
+    { name: "Green Thumb Gardens", address: "456 Ridge Ave, Lakewood, NJ", business_type: 2, rating: 4.0 },
+    { name: "Plumb Perfect", address: "1350 50th st, Brooklyn, NY", business_type: 1, rating: 3.8 },
+    { name: "Electric Experts", address: "4 xavier Dr, Jackson Townshsp, NJ", business_type: 0, rating: 4.7 },
+    { name: "Garden Gurus", address: "5803 20th ave, Brooklyn, NY", business_type: 2, rating: 4.2 },
+    { name: "Plumbing Pros", address: "14 Tuscanny terrace, Lakewood, NJ", business_type: 1, rating: 4.1 }
+    # { name: "Bright Sparks", address: "404 Brooklyn Ave, Brooklyn, NY", business_type: "Electrician", rating: 4.9 },
+    # { name: "Lush Landscapes", address: "505 Lakewood Blvd, Lakewood, NJ", business_type: "Gardener", rating: 3.9 },
+]
 
-businesses = 10.times.map do
-    {
-        business_type: trades.sample,
-        name: names.sample,
-        zip_code: zip_codes.sample,
-        rating: rand(1.0..5.0).round(1)
-    }
-end
-
-businesses.each do |b|
-    bus = Business.find_or_create_by(name: b[:name], business_type: b[:business_type], zip_code: b[:zip_code], rating: b[:rating])
+businesses.each do |business|
+    Business.find_or_create_by!(business)
 end

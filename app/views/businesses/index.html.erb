@@ -11,6 +11,34 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #d1d3d4;
+      text-align: left;
+      font-family: "Arial", sans-serif;
+    }
+    th {
+      background-color: #b2ebf2;
+      color: #008080;
+    }
+    tr:nth-child(even) {
+      background-color: #e0f7fa;
+    }
+    a {
+      color: #008080;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .stars {
+      color: #f39c12;
     }
     th,
     td {
@@ -47,17 +75,11 @@
       </tr>
     </thead>
     <tbody>
-      <% businesses.each do |b| %>
+      <% @businesses.each do |b| %>
       <tr>
         <td><a href="/businesses/<%= b.id %>"><%= b.name %></a></td>
-        <td><%= b.business_type %></td>
-        <td>
-          <span class="stars">
-            <% full_stars = b.rating.floor %> <% half_star = (b.rating -
-            full_stars >= 0.5) %> <% full_stars.times do %> &#9733; <% end %> <%
-            if half_star %> &#9734; <% end %>
-          </span>
-        </td>
+        <td><%= b.business_type.humanize %></td>
+        <td></td>
       </tr>
       <% end %>
     </tbody>

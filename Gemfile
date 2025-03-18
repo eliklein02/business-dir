@@ -5,7 +5,6 @@ gem "rails", "~> 7.2.2", ">= 7.2.2.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -35,6 +34,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem "sqlite3", ">= 1.4"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -47,6 +47,7 @@ end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "pg"
   gem "web-console"
 end
 
@@ -59,3 +60,11 @@ end
 gem "dotenv-rails", "~> 3.1"
 
 gem "whatsapp_sdk", "~> 1.0"
+
+gem "geocoder", "~> 1.8"
+
+gem "ruby-openai", "~> 7.4"
+
+gem "httparty", "~> 0.22.0"
+
+

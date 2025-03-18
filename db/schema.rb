@@ -10,13 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_09_200338) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_16_185135) do
   create_table "businesses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "zip_code"
-    t.string "business_type"
+    t.string "city"
     t.float "rating"
+    t.string "zip_code"
+    t.string "phone_number"
+    t.float "latitude"
+    t.float "longitude"
+    t.integer "business_type"
+    t.string "address"
+    t.integer "communication_form"
   end
 end
