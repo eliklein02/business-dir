@@ -78,7 +78,7 @@
       <% @businesses.each do |b| %>
       <tr>
         <td><a href="/businesses/<%= b.id %>"><%= b.name %></a></td>
-        <td><%= b.business_type.humanize %></td>
+        <td><%= b.business_type %></td>
         <td></td>
       </tr>
       <% end %>
