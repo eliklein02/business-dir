@@ -66,7 +66,7 @@ gem "whatsapp_sdk", "~> 1.0"
 
 gem "geocoder", "~> 1.8"
 
-gem "ruby-openai", "~> 7.4"
+gem "ruby-openai", "~> 8.0"
 
 gem "httparty", "~> 0.22.0"
 
