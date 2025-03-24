@@ -23,7 +23,7 @@
 
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
         <% options = [["Choose how you communicate", "", {disabled: true, selected: true}]] + Business.communication_forms.keys.map{ |c| [c.humanize, c]} %>
-        <%= f.select :business_type, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
+        <%= f.select :communication_form, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
       </div>
 
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">

@@ -1,70 +1,9 @@
-<div
-  class="container"
-  style="
-    background-color: #999;
-    min-height: 100vh;
-    width: 100%;
-    margin: 0px;
-    padding-top: 20vh;
-  "
->
-  <div
-    style="
-      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-      max-width: 600px;
-      margin-inline: auto;
-    "
-  >
-    <div
-      style="
-        position: absolute;
-        top: -50px;
-        left: -50px;
-        width: 200px;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-      "
-    ></div>
-    <div
-      style="
-        position: absolute;
-        bottom: -50px;
-        right: -50px;
-        width: 200px;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-      "
-    ></div>
-    <div
-      style="
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      "
-    >
-      <h1 style="color: #008080; font-family: 'Arial', sans-serif">
-        <%= @business.name %>
-      </h1>
-      <p style="color: #333; font-family: 'Arial', sans-serif">
-        <strong>Address:</strong> <%= @business.address %>
-      </p>
-      <p style="color: #333; font-family: 'Arial', sans-serif">
-        <strong>Phone Number:</strong> <%= @business.phone_number %>
-      </p>
-      <p style="color: #333; font-family: 'Arial', sans-serif">
-        <strong>Communication Form:</strong> <%=
-        @business.communication_form.humanize %>
-      </p>
-      <p style="color: #333; font-family: 'Arial', sans-serif">
-        <strong>Business Type:</strong> <%= @business.business_type.humanize %>
-      </p>
+<div class="container">
+  <p class="text-5xl" >Hello, <%= @business.name %></p>
+  <div class="container flex flex-col items-center justify-center">
+    <div>
+      <p>Here is your breakdown of clicks by day</p>
+      <%= line_chart Business.group_by_day(:created_at).count %>
     </div>
   </div>
 </div>
