@@ -23,12 +23,14 @@ class ApiController < ApplicationController
                 first_word = message.split(" ").first.downcase
                 case first_word
                 when "hi", "hello", "hey"
-                    send_whatsapp_message(sender, "👋 *Welcome to Business Directory!*\n\nUse this bot to find local businesses. For example, 'broken toilet brooklyn ny', or 'electrician in lakewood nj \n\n _You can always reply 'help' for instructions._ ")
+                    send_whatsapp_message(sender, "👋 *Welcome to Business Directory!*\n\nUse this bot to find local businesses. For example, 'plumber brooklyn ny', or 'electrician in 08527' \n\n _You can always reply 'help' for instructions._ ")
                     render json: { message: "Message sent" }, status: :ok
-                when "t"
-                    send_whatsapp_interactive("Business Directory", "Tap the button below to visit our website.", "Find local businesses easily!", "Visit Website", "https://businessdirectory.com", sender)
+                when "help"
+                    send_whatsapp_message(sender, "Hey there! 👋 Need some help finding a service?\n\nHere's how to use me:\n\n*Tell me what you're looking for:*\n    * Just type in what kind of service you need (like 'plumber,' 'electrician,' 'gardener,' 'handyman' etc.).\n    * I can understand things like 'my sink is leaking' or 'my lights are out.'\n\n*Tell me where you need it:*\n    * Give me a location! You can use:\n        * City and State (e.g., 'Brooklyn, New York')\n        * Zip code (e.g., '11204')\n        * City name alone (e.g., 'Jackson')\n        * Full address.\n    * *Important:* Using a full address will provide the most accurate results.\n\n*Example:*\n    * If you need a plumber in 11204, you can try: 'Broken toilet in 11204'\n    * If you need an electrician in Brooklyn, New York, you can try: 'My lights are out in Brooklyn, New York'\n    * If you need a gardener at your house in New Jersey, you can try: 'I need a gardener at 123 Main St. Lakewood, NJ'\n\n*What I'll do:*\n    * I'll take your request and find the right service type and location.\n    * I'll then send that information to the search engine.\n    * If you do not provide a location, I will return the service type with #Unknown.\n\n_If you would like to sign up to be on our directory, reply 'sign up'._\n\n*Let's find the service you need! Just type your request below.* 😎")
+                when "sign"
+                    send_whatsapp_interactive("🚀 Ready to get more customers? 🚀", "Imagine your business popping up *exactly* when someone needs your service. We make it happen!\n\nPlus, you'll get your own dashboard to keep track of users who found you through our service. 👷🏼‍♂️", "", "Sign Up", "https://192dnsserver.com/sign_up", sender)
                 when "r"
-                    reply_button_interactive(sender)
+                    send_whatsapp_message(sender, "\uFF0D\uFF0D\uFF0D\uFF0D\uFF0D\uFF0D \n\n \u2015\u2015\u2015\u2015")
                 else
                     begin
                         ai_returned = find_correct_trade_ai(message)
@@ -40,8 +42,11 @@ class ApiController < ApplicationController
                         # end
                         location = location_as_array.join(" ")
                         # location_coordinates = Geocoder.coordinates(location)
-                        relevant_businesses = Business.near(location, 10, params: { countrycodes: "us" })
-                        relevant_businesses = relevant_businesses.where(business_type: business_type_index)
+                        # relevant_businesses = Business.near(location, 10, params: { countrycodes: "us" })
+                        relevant_businesses = Business.where(business_type: business_type_index)
+                        relevant_businesses = relevant_businesses.select do |business|
+                            Geocoder::Calculations.distance_between(Geocoder.coordinates(location), [business.latitude, business.longitude]) <= business.mile_preference
+                        end
                         count = relevant_businesses.size
                         if count == 0
                             send_whatsapp_message(sender, "We're sorry, we couldn't find any businesses near #{location}")
@@ -49,7 +54,7 @@ class ApiController < ApplicationController
                             send_whatsapp_message(
                                 sender,
                                 "We found #{count} matching #{count == 1 ? "business" : "businesses" } near #{location}!" + "\n\n" + relevant_businesses.map {
-                                    |b| "👤 #{ b.name } \n\n 📞 #{shorten_url(b.communication_form, b.phone_number)} \n\n ⭐️ #{ b.rating } \n ------------------------- " 
+                                    |b| "🏢 *#{ b.name }* \n\n 📞 #{b.contact_url} \n\n ⭐️ #{ b.rating } \n ------------------------- " 
                                 }.join("\n")
                                 )
                         end
@@ -109,7 +114,6 @@ class ApiController < ApplicationController
             interactive: interactive_reply_buttons
         )
     end
-
 
     def send_whatsapp_interactive(header_text, text, footer_text, button_text, button_url, sender)
         client = WhatsappSdk::Api::Client.new
@@ -204,17 +208,5 @@ class ApiController < ApplicationController
         )
         puts response.dig("choices", 0, "message", "content")
         response.dig("choices", 0, "message", "content").downcase
-    end
-
-    def shorten_url(c_f, pn)
-        puts "starting for #{c_f} and #{pn}"
-        if c_f == "whatsapp"
-            whatsapp_url = "https://api.whatsapp.com/send?phone=#{pn}&text=Hey,+I+heard+about+you+from+Business+Directory"
-            new_url = HTTParty.get("https://tinyurl.com/api-create.php?url=#{whatsapp_url}").body
-        elsif c_f == "sms"
-            sms_url = "sms:#{pn}&Body=Hey,%20I%20heard%20about%20you%20from%20Business%20Directory"
-            new_url = HTTParty.get("https://tinyurl.com/api-create.php?url=#{sms_url}").body
-        end
-        new_url
     end
 end

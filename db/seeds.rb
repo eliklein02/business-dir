@@ -7,16 +7,26 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-businesses = [
-    { name: "John's Electrical", address: "860 E. 27th st, Brooklyn, NY", business_type: 0, rating: 4.5 },
-    { name: "Green Thumb Gardens", address: "456 Ridge Ave, Lakewood, NJ", business_type: 2, rating: 4.0 },
-    { name: "Plumb Perfect", address: "1350 50th st, Brooklyn, NY", business_type: 1, rating: 3.8 },
-    { name: "Electric Experts", address: "4 xavier Dr, Jackson Townshsp, NJ", business_type: 0, rating: 4.7 },
-    { name: "Garden Gurus", address: "5803 20th ave, Brooklyn, NY", business_type: 2, rating: 4.2 },
-    { name: "Plumbing Pros", address: "14 Tuscanny terrace, Lakewood, NJ", business_type: 1, rating: 4.1 }
-    # { name: "Bright Sparks", address: "404 Brooklyn Ave, Brooklyn, NY", business_type: "Electrician", rating: 4.9 },
-    # { name: "Lush Landscapes", address: "505 Lakewood Blvd, Lakewood, NJ", business_type: "Gardener", rating: 3.9 },
-]
+business_types = [ "electrician", "plumber", "gardener", "painter", "graphic_artist", "handyman", "carpenter", "roofer", "mason", "welder", "hvac", "pest_control", "landscaper", "cleaning_service" ]
+communication_forms = [ "whatsapp", "sms", "voice" ]
+addresses = ["1763 48th street", "65 citadel drive"]
+businesses = []
+
+addresses.each do |address|
+    2.times do
+        businesses << {
+            name: Faker::Company.name,
+            rating: rand(1.0..5.0).round(1),
+            phone_number: Faker::PhoneNumber.phone_number,
+            business_type: business_types.sample,
+            address: address,
+            city: address == "1763 48th street" ? "Brooklyn" : "Jackson Township",
+            state: address == "1763 48th street" ? "NY" : "NJ",
+            communication_form: communication_forms.sample,
+            mile_preference: rand(1..20),
+        }
+    end
+end
 
 businesses.each do |business|
     Business.find_or_create_by!(business)
