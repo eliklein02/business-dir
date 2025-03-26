@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_business
-    unless current_business && current_business.id == @business.id
+    unless current_business && current_business.id == @business.id || current_business && current_business.admin == true
       if current_business
         redirect_to business_path(current_business)
       else

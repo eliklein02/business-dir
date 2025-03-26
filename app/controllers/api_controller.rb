@@ -17,7 +17,22 @@ class ApiController < ApplicationController
             statuses = value["statuses"]&.first if value
             if messages
                 return if messages["type"] == "reaction"
-                business_type_list = [ "electrician", "plumber", "gardener", "painter", "graphic artist" ]
+                business_type_list = [
+                    "electrician",
+                    "plumber",
+                    "gardener",
+                    "painter",
+                    "graphic_artist",
+                    "handyman",
+                    "carpenter",
+                    "roofer",
+                    "mason",
+                    "welder",
+                    "hvac",
+                    "pest_control",
+                    "landscaper",
+                    "cleaning_service"
+                ]
                 sender = messages["from"]
                 message = messages["text"]["body"]
                 first_word = message.split(" ").first.downcase
@@ -34,8 +49,19 @@ class ApiController < ApplicationController
                 else
                     begin
                         ai_returned = find_correct_trade_ai(message)
+                        puts ai_returned
                         business_type, location = ai_returned.split("#")
+                        if business_type.downcase == "unknown" || location.downcase == "unknown"
+                            send_whatsapp_message(sender, "We're sorry, we couldn't understand your request. Please try again with both the type or servie and a location.")
+                            return
+                        end
+                        puts business_type
+                        puts location
+                        if business_type.split(" ").size > 1
+                            business_type = business_type.split(" ").join("_")
+                        end
                         business_type_index = business_type_list.index(business_type.downcase)
+                        puts business_type_index
                         location_as_array = location.downcase.split(" ")
                         # if location_as_array.include?("jackson")
                         #     location_as_array[location_as_array.index("jackson")] = "jackson township"
@@ -44,10 +70,12 @@ class ApiController < ApplicationController
                         # location_coordinates = Geocoder.coordinates(location)
                         # relevant_businesses = Business.near(location, 10, params: { countrycodes: "us" })
                         relevant_businesses = Business.where(business_type: business_type_index)
+                        puts relevant_businesses.inspect
                         relevant_businesses = relevant_businesses.select do |business|
                             Geocoder::Calculations.distance_between(Geocoder.coordinates(location), [business.latitude, business.longitude]) <= business.mile_preference
                         end
                         count = relevant_businesses.size
+                        puts count
                         if count == 0
                             send_whatsapp_message(sender, "We're sorry, we couldn't find any businesses near #{location}")
                         else
@@ -165,6 +193,16 @@ class ApiController < ApplicationController
                         * Electrician
                         * Gardener
                         * Graphic Artist
+                        * Handyman
+                        * Carpenter
+                        * Roofer
+                        * Mason
+                        * Welder
+                        * HVAC
+                        * Pest Control
+                        * Landscaper
+                        * Cleaning Service
+                        * Painter
 
                     * For example:
                         * 'My sink is leaking' should translate to 'Plumber'.
@@ -200,6 +238,8 @@ class ApiController < ApplicationController
 
                     **Your response should ONLY be the formatted output: `[Business Type]#[Location]`**
 
+                    *** If one of them are not there, please return 'Unknown' for that field. ***
+
                     Here is the input#{message}"
                 }
             ],
@@ -212,7 +252,12 @@ class ApiController < ApplicationController
 
     def handle_click_and_redirect
         pn = params[:pn]
-        business = Business.find_by(phone_number: pn)
+        id = params[:id] if params[:id]
+        if id && id != ""
+            business = Business.find(id)
+        else
+            business = Business.find_by(phone_number: pn)
+        end
         puts business.inspect
         Event.create(business_id: business.id, event_type: 0)
         url = ""
@@ -220,6 +265,8 @@ class ApiController < ApplicationController
             url = "https://api.whatsapp.com/send?phone=#{pn}&text=Hey,+I+heard+about+you+from+Business+Directory"
         elsif business.communication_form == "sms"
             url = "sms:#{pn}&Body=Hey,%20I%20heard%20about%20you%20from%20Business%20Directory"
+        elsif business.communication_form == "voice"
+            url = "tel:#{pn}"
         end
         redirect_to url, allow_other_host: true
     end

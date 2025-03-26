@@ -28,5 +28,9 @@ class PagesController < ApplicationController
     def privacy_policy
     end
 
+    def dashboard
+        protect_route
+    end
+
     private
 end

@@ -1,10 +1,9 @@
-<div class="container flex flex-col items-center justify-center p-4">
-  <div class="w-full max-w-5xl">
+  <div class="w-full flex flex-col items-center justify-center">
     <div class="w-full max-w-5xl mt-10 flex flex-col md:flex-row md:justify-center">
       <div class="w-full max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-buildings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" /><path d="M16 8h2c1 0 2 1 2 2v11" /><path d="M3 21h18" /><path d="M10 12v0" /><path d="M10 16v0" /><path d="M10 8v0" /><path d="M7 12v0" /><path d="M7 16v0" /><path d="M7 8v0" /><path d="M17 12v0" /><path d="M17 16v0" /></svg>
         <a href="#">
-          <h5 class="mb-5 mt-5 text-2xl sm:text-4xl font-semibold tracking-tight text-gray-900 dark:text-white text-center md:text-left"><%= @business.name %></h5>
+          <h5 class="mb-5 mt-5 text-2xl sm:text-4xl font-semibold tracking-tight text-gray-900 dark:text-white md:text-left"><%= @business.name %></h5>
         </a>
         
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
@@ -14,24 +13,38 @@
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-home-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 12l-9 -9l-9 9h2v7a2 2 0 0 0 2 2h4.7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M20.2 20.2l1.8 1.8" /></svg>
-          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= @business.address + ", " + @business.city + ", " + @business.state %></p>
+          <div>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= @business.address %></p>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= @business.city + ", " + @business.state %></p>
+          </div>
+        </div>
+
+        <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= @business.business_type.humanize %></p>
         </div>
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
           <% if @business.communication_form == "whatsapp" %>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" /><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" /></svg> 
-            <p>Uses WhatsApp</p>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Uses WhatsApp</p>
           <% elsif @business.communication_form == "sms" %>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-message"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
-            <p>Uses SMS</p>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Uses SMS</p>
           <% else %>
-            <p>Uses Phone</p>
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-phone"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Uses Phone</p>
           <% end %>
         </div>
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-route"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z" /><path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" /></svg>
-          Would travel <%= @business.mile_preference %> miles
+          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Would travel <%= @business.mile_preference %> miles</p>
+        </div>
+
+        <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
+          <a class="font-normal text-xl underline sm:text-2xl text-gray-500 dark:text-gray-400 break-words" href="<%= @business.contact_url %>">Contact Url</a>
         </div>
 
         <a href="<%= edit_business_path(@business) %>" class="inline-flex font-medium items-center text-blue-600 hover:underline gap-1">
@@ -42,9 +55,8 @@
     </div>
 
     <div class="w-full mt-10">
-      <p>Here is your breakdown of clicks by day</p>
-      <% clicks = Event.where(business_id: @business.id) %>
-      <%= area_chart clicks.group_by_day(:created_at, range: 1.week.ago..Date.today).count %>
+      <p class="text-center text-lg">Here is your breakdown of clicks by day</p>
+      <% clicks = Event.where(business_id: @business.id, event_type: 0) %>
+      <%= area_chart clicks.group_by_day(:created_at, range: 1.week.ago..Date.today).count, min: 0, max: 10, colors: ["#3377ff"] %>
     </div>
   </div>
-</div>
