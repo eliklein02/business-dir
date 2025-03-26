@@ -37,7 +37,7 @@ class Business < ApplicationRecord
 
     def set_contact_url
         puts "starting set_contact_url"
-        return unless self.phone_number_changed?
+        return unless self.saved_change_to_phone_number?
         puts "setting contact url"
         root_url = ENV.fetch("ROOT_URL")
         pn = self.phone_number
