@@ -6,7 +6,11 @@ class SessionsController < ApplicationController
     def create
         puts params
         pn = strip_phone_number(params[:phone_number])
-        @business = Business.find_by(phone_number: pn, id: params[:id])
+        if params[:id]
+            @business = Business.find_by(phone_number: pn, id: params[:id])
+        else
+            @business = Business.find_by(phone_number: pn)
+        end
         if @business.authenticate(params[:password])
             session[:business_id] = @business.id
             redirect_to business_path(@business)
