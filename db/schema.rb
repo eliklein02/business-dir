@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_184216) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_25_233826) do
   create_table "businesses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -27,5 +27,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_184216) do
     t.integer "mile_preference"
     t.string "contact_url"
     t.string "state"
+    t.string "full_address"
+    t.string "password_digest"
+    t.boolean "admin", default: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "event_type"
+    t.integer "business_id"
   end
 end

@@ -209,4 +209,18 @@ class ApiController < ApplicationController
         puts response.dig("choices", 0, "message", "content")
         response.dig("choices", 0, "message", "content").downcase
     end
+
+    def handle_click_and_redirect
+        pn = params[:pn]
+        business = Business.find_by(phone_number: pn)
+        puts business.inspect
+        Event.create(business_id: business.id, event_type: 0)
+        url = ""
+        if business.communication_form == "whatsapp"
+            url = "https://api.whatsapp.com/send?phone=#{pn}&text=Hey,+I+heard+about+you+from+Business+Directory"
+        elsif business.communication_form == "sms"
+            url = "sms:#{pn}&Body=Hey,%20I%20heard%20about%20you%20from%20Business%20Directory"
+        end
+        redirect_to url, allow_other_host: true
+    end
 end

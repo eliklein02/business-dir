@@ -17,7 +17,7 @@ addresses.each do |address|
         businesses << {
             name: Faker::Company.name,
             rating: rand(1.0..5.0).round(1),
-            phone_number: Faker::PhoneNumber.phone_number,
+            phone_number: "13474601456",
             business_type: business_types.sample,
             address: address,
             city: address == "1763 48th street" ? "Brooklyn" : "Jackson Township",

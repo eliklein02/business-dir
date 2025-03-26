@@ -1,5 +1,13 @@
 class PagesController < ApplicationController
     def index
+        if current_business
+            redirect_to business_path(current_business)
+        else
+            render :index
+        end
+    end
+
+    def contact
     end
 
     def save_contact

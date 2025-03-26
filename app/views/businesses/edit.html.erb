@@ -1,17 +1,16 @@
 <div class="container">
     <p class="text-5xl text-center">Join our community!</p>
-    <% if @business.errors.any? %>
-      <div id="error_explanation" class="text-center">
-        <h2><%= pluralize(@business.errors.count, "error") %> prohibited this business from being saved:</h2>
-        <ul>
-          <% @business.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <%= form_with(model: @business, local: true, data: { turbo: false }, html: { class: "max-w-md mx-auto border-black border-1 mt-10 rounded-lg p-10" }) do |f| %>
-
+    <%= form_with(model: @business, local: true, html: { class: "max-w-md mx-auto border-black border-1 mt-10 rounded-lg p-10" }) do |f| %>
+      <% if @business.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@business.errors.count, "error") %> prohibited this business from being saved:</h2>
+          <ul>
+            <% @business.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
         <%= f.text_field :name, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
         <%= f.label :name, class: "peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
@@ -23,18 +22,7 @@
       </div>
 
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-        <%= f.text_field :password, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-        <%= f.label "Password" , class: "peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
-      </div>
-
-      <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-        <%= f.text_field :password_confirmation, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-        <%= f.label "Confirm your password" , class: "peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
-      </div>
-
-      <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-        <% options = [["Choose how you communicate", "", {disabled: true, selected: true}]] + Business.communication_forms.keys.map{ |c| [c.humanize, c]} %>
-        <%= f.select :communication_form, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
+        <%= f.select :communication_form, Business.communication_forms.keys.map{ |c| [c.humanize, c]}, {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
       </div>
 
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
@@ -56,20 +44,11 @@
         <%= f.number_field :mile_preference, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
         <%= f.label "How many miles would you travel", class: "peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
       </div>
-      
-      <!--
-      <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-        <%= f.label :business_type, class: "block mb-2 peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400" %>
-        <%= f.select :business_type, Business.business_types.keys.map { |t| [t.humanize, t] }, {}, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-      </div>
-      -->
 
       <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-        <% options = [["Choose a businesss type", "", {disabled: true, selected: true}]] + Business.business_types.keys.map{ |t| [t.humanize, t]} %>
-        <%= f.select :business_type, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
+        <%= f.select :business_type, Business.business_types.keys.map{ |t| [t.humanize, t]}, {}, class: "block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
       </div>
 
       <%= f.submit 'Submit', class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
-
     <% end %>
 </div>
