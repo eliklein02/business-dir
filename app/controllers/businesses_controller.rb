@@ -10,6 +10,9 @@ class BusinessesController < ApplicationController
     if @business.address.split("#")[1] == "admin"
       @business.admin = true
     end
+    if @business.city.strip == "Jackson" || @business.city.strip == "jackson"
+      @business.city = "Jackson Township"
+    end
     @business.phone_number = strip_phone_number(@business.phone_number)
     if @business.save
       session[:business_id] = @business.id
@@ -36,6 +39,12 @@ class BusinessesController < ApplicationController
 
   def update
     @business = Business.find(params[:id])
+    if @business.address.split("#")[1] == "admin"
+      @business.admin = true
+    end
+    if @business.city.strip == "Jackson" || @business.city.strip == "jackson"
+      @business.city = "Jackson Township"
+    end
     @business.phone_number = strip_phone_number(@business.phone_number)
     if @business.update(business_params)
       redirect_to @business

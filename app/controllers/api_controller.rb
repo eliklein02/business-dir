@@ -17,22 +17,6 @@ class ApiController < ApplicationController
             statuses = value["statuses"]&.first if value
             if messages
                 return if messages["type"] == "reaction"
-                business_type_list = [
-                    "electrician",
-                    "plumber",
-                    "gardener",
-                    "painter",
-                    "graphic_artist",
-                    "handyman",
-                    "carpenter",
-                    "roofer",
-                    "mason",
-                    "welder",
-                    "hvac",
-                    "pest_control",
-                    "landscaper",
-                    "cleaning_service"
-                ]
                 sender = messages["from"]
                 message = messages["text"]["body"]
                 first_word = message.split(" ").first.downcase
@@ -52,7 +36,7 @@ class ApiController < ApplicationController
                         puts ai_returned
                         business_type, location = ai_returned.split("#")
                         if business_type.downcase == "unknown" || location.downcase == "unknown"
-                            send_whatsapp_message(sender, "We're sorry, we couldn't understand your request. Please try again with both the type or servie and a location.")
+                            send_whatsapp_message(sender, "We're sorry, we couldn't understand your request. Please try again with both the type of servie and a location.")
                             return
                         end
                         puts business_type
@@ -60,24 +44,20 @@ class ApiController < ApplicationController
                         if business_type.split(" ").size > 1
                             business_type = business_type.split(" ").join("_")
                         end
+                        business_type_list = Business.business_types.keys
                         business_type_index = business_type_list.index(business_type.downcase)
                         puts business_type_index
                         location_as_array = location.downcase.split(" ")
-                        # if location_as_array.include?("jackson")
-                        #     location_as_array[location_as_array.index("jackson")] = "jackson township"
-                        # end
                         location = location_as_array.join(" ")
-                        # location_coordinates = Geocoder.coordinates(location)
-                        # relevant_businesses = Business.near(location, 10, params: { countrycodes: "us" })
                         relevant_businesses = Business.where(business_type: business_type_index)
                         puts relevant_businesses.inspect
                         relevant_businesses = relevant_businesses.select do |business|
-                            Geocoder::Calculations.distance_between(Geocoder.coordinates(location), [business.latitude, business.longitude]) <= business.mile_preference
+                            Geocoder::Calculations.distance_between(Geocoder.coordinates(location, params: { countrycodes: "us"}), [business.latitude, business.longitude]) <= business.mile_preference
                         end
                         count = relevant_businesses.size
                         puts count
                         if count == 0
-                            send_whatsapp_message(sender, "We're sorry, we couldn't find any businesses near #{location}")
+                            send_whatsapp_message(sender, "We're sorry, we couldn't find any such businesses (#{business_type.humanize.capitalize}) near #{location}")
                         else
                             send_whatsapp_message(
                                 sender,
@@ -189,24 +169,12 @@ class ApiController < ApplicationController
 
                     * You will receive a user request that implies a specific type of business.
                     * Use the following list to determine the appropriate business type. If the user request implies a business type not on this list, make your best educated guess from the list.
-                        * Plumber
-                        * Electrician
-                        * Gardener
-                        * Graphic Artist
-                        * Handyman
-                        * Carpenter
-                        * Roofer
-                        * Mason
-                        * Welder
-                        * HVAC
-                        * Pest Control
-                        * Landscaper
-                        * Cleaning Service
-                        * Painter
+                        #{Business.business_types.keys}
 
                     * For example:
-                        * 'My sink is leaking' should translate to 'Plumber'.
-                        * 'I need a haircut' should translate to 'Hair Salon'.
+                        * 'My sink is leaking' should translate to 'plumber'.
+                        * 'Flower planting' should translate to 'gardener'.
+                        * 'My roof is leaking' should translate to 'roofer'.
 
                     **2. Location:**
 
@@ -216,29 +184,33 @@ class ApiController < ApplicationController
                         * Zip code (e.g., '11204')
                         * City name alone (e.g., 'Jackson')
                         * Full address (where you will return the whole thing correctly formatted)
-                    * **Special Instruction for 'Jackson':**
-                        * If the user specifies 'Jackson' as the location, you MUST interpret this as 'Jackson Township, New Jersey'. Therefore, your output should be 'Jackson Township, New Jersey' in the location field.
+                    * **Special Instruction for 'Jackson, NJ':**
+                        * If the user specifies 'Jackson NJ' as the location, you MUST interpret this as 'Jackson Township, New Jersey'. Therefore, your output should be 'Jackson Township, New Jersey' in the location field.
 
                     **Example Input and Output:**
 
                     * **Input:** 'Broken toilet in 11204'
-                    * **Output:** Plumber#11204
+                    * **Output:** plumber#11204
 
-                    * **Input:** 'I need a restaurant in Brooklyn, New York'
-                    * **Output:** Restaurant#Brooklyn, New York
+                    * **Input:** 'I need a roofer in Brooklyn, New York'
+                    * **Output:** roofer#Brooklyn, New York
 
-                    * **Input:** 'Looking for a mechanic in Jackson'
-                    * **Output:** Mechanic#Jackson Township, New Jersey
+                    * **Input:** 'Looking for a flower to be planted in Jackson NJ'
+                    * **Output:** gardener#Jackson Township, New Jersey
 
-                    * **Input:** 'My teeth hurt, I need a dentist'
-                    * **Output:** Dentist#Unknown (if no location is provided)
+                    * **Input:** 'I need a welder in 08527'
+                    * **Output:** welder#Unknown (if no location is provided)
 
-                    * **Input:** 'Where can I buy milk in Boston, Massachusetts?'
-                    * **Output:** Grocery Store#Boston, Massachusetts
+                    * **Input:** 'Where can I get my ac fixed in Boston, Massachusetts'
+                    * **Output:** hvace#Boston, Massachusetts
 
-                    **Your response should ONLY be the formatted output: `[Business Type]#[Location]`**
+                    **Your response should ONLY be the formatted output: `[business_type]#[Location]`**
 
                     *** If one of them are not there, please return 'Unknown' for that field. ***
+
+                    *** If you are unable to determine the business type or location, please return 'Unknown' for both fields. ***
+
+                    **** If there is anything other that a business type and/or location, please return 'Unknown' for both fields. ****
 
                     Here is the input#{message}"
                 }
