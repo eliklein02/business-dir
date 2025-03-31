@@ -20,7 +20,7 @@ class PagesController < ApplicationController
             END:VCARD
         VCARD
 
-        send_data vcard, filename: "contact.vcf", type: "text/vcf"
+        send_data vcard, filename: "contact.vcf", type: "text/vcf" and return
     end
 
     def about
@@ -29,7 +29,7 @@ class PagesController < ApplicationController
     def privacy_policy
     end
 
-    def dashboard
+    def admin
         protect_route
     end
 

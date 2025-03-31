@@ -6,11 +6,12 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  get "dashboard" => "pages#dashboard"
+  get "admin" => "pages#admin"
   get "save_contact" => "pages#save_contact"
   get "sign_up" => "businesses#new"
 
   resources :businesses, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  resources :business_types, only: [ :create, :destroy ]
   resources :sessions, only: [ :new, :create ]
   delete "logout" => "sessions#destroy"
 

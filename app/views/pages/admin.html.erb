@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="w-full mt-10">
+        <div class="overflow-y-auto h-[15rem] border rounded p-4 bg-gray-100">
+            <%= form_with model: BusinessType.new, url: business_types_path, local: true, class: "flex flex-col space-y-4" do |f| %>
+                <div>
+                    <%= f.text_field :name, placeholder: "Enter business type", class: "w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+                </div>
+                <div>
+                    <%= f.submit "Create", class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+                </div>
+            <% end %>
+            <hr class="my-4" >
+            <% business_types = BusinessType.order(:name) %>
+            <ul class="list-disc pl-5">
+            <% business_types.each do |business_type| %>
+            <li class="mb-2 text-gray-700">
+                <%= business_type.name.humanize %> <%= link_to "Delete", business_type_path(business_type), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+            </li>
+            <% end %>
+            </ul>
+        </div>
+    </div>
+
+    <div class="w-full mt-10">
+        <p class="text-center text-lg">Here is your breakdown of clicks by day</p>
+        <% clicks = Event.where(event_type: 0) %>
+        <%= area_chart clicks.group_by_day(:created_at, range: 1.week.ago..Date.today).count %>
+    </div>
+
+    <div class="w-full mt-10">
+        <p class="text-center text-lg">Here is your breakdown of contact saves by day</p>
+        <% saves = Event.where(event_type: 2) %>
+        <%= area_chart saves.group_by_day(:created_at, range: 1.week.ago..Date.today).count %>
+    </div>
+</div>

@@ -1,0 +1,2 @@
+module BusinessTypeHelper
+end
