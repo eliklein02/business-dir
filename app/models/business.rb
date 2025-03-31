@@ -1,4 +1,6 @@
 class Business < ApplicationRecord
+    attr_accessor :other
+
     has_secure_password
     validates :phone_number, presence: true
     geocoded_by :full_address, params: { countrycodes: "us" }
@@ -7,23 +9,7 @@ class Business < ApplicationRecord
     before_save :add_one_to_phone_number
     after_commit :set_contact_url
 
-    enum :business_type, {
-        :electrician => 0,
-        :plumber => 1,
-        :gardener => 2,
-        :painter => 3,
-        :graphic_artist => 4,
-        :handyman => 5,
-        :carpenter => 6,
-        :roofer => 7,
-        :mason => 8,
-        :welder => 9,
-        :hvac => 10,
-        :pest_control => 11,
-        :landscaper => 12,
-        :cleaning_service => 13
-    }
-    enum :communication_form, { :whatsapp=>0, :sms=>1, :voice=>2 }
+    enum :communication_form, { :whatsapp=>0, :sms=>1, :voice=>2, :email=>3 }
 
     def set_full_address
         puts "startinf set_full_address"
@@ -37,7 +23,7 @@ class Business < ApplicationRecord
 
     def set_contact_url
         puts "starting set_contact_url"
-        return unless self.saved_change_to_phone_number?
+        return unless self.saved_change_to_phone_number? || self.saved_change_to_communication_form
         puts "setting contact url"
         root_url = ENV.fetch("ROOT_URL")
         pn = self.phone_number

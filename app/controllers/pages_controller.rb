@@ -11,6 +11,7 @@ class PagesController < ApplicationController
     end
 
     def save_contact
+        Event.create(event_type: :contact_save)
         vcard = <<~VCARD
             BEGIN:VCARD
             VERSION:3.0

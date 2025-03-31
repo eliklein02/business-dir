@@ -3,3 +3,9 @@
     <% clicks = Event.where(event_type: 0) %>
     <%= area_chart clicks.group_by_day(:created_at, range: 1.week.ago..Date.today).count %>
 </div>
+
+<div class="w-full mt-10">
+    <p class="text-center text-lg">Here is your breakdown of clicks by day</p>
+    <% saves = Event.where(event_type: 2) %>
+    <%= area_chart saves.group_by_day(:created_at, range: 1.week.ago..Date.today).count %>
+</div>

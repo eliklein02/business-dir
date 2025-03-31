@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_25_233826) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_30_224456) do
+  create_table "business_types", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+  end
+
   create_table "businesses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -30,6 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_25_233826) do
     t.string "full_address"
     t.string "password_digest"
     t.boolean "admin", default: false
+    t.boolean "is_stationary", default: false
   end
 
   create_table "events", force: :cascade do |t|

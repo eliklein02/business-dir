@@ -16,7 +16,7 @@ class ApiController < ApplicationController
             messages = value["messages"]&.first if value
             statuses = value["statuses"]&.first if value
             if messages
-                return if messages["type"] == "reaction"
+                return if messages["type"] == "reaction" || messages["type"] == "sticker"
                 sender = messages["from"]
                 message = messages["text"]["body"]
                 first_word = message.split(" ").first.downcase
@@ -25,46 +25,53 @@ class ApiController < ApplicationController
                     send_whatsapp_message(sender, "👋 *Welcome to Business Directory!*\n\nUse this bot to find local businesses. For example, 'plumber brooklyn ny', or 'electrician in 08527' \n\n _You can always reply 'help' for instructions._ ")
                     render json: { message: "Message sent" }, status: :ok
                 when "help"
-                    send_whatsapp_message(sender, "Hey there! 👋 Need some help finding a service?\n\nHere's how to use me:\n\n*Tell me what you're looking for:*\n    * Just type in what kind of service you need (like 'plumber,' 'electrician,' 'gardener,' 'handyman' etc.).\n    * I can understand things like 'my sink is leaking' or 'my lights are out.'\n\n*Tell me where you need it:*\n    * Give me a location! You can use:\n        * City and State (e.g., 'Brooklyn, New York')\n        * Zip code (e.g., '11204')\n        * City name alone (e.g., 'Jackson')\n        * Full address.\n    * *Important:* Using a full address will provide the most accurate results.\n\n*Example:*\n    * If you need a plumber in 11204, you can try: 'Broken toilet in 11204'\n    * If you need an electrician in Brooklyn, New York, you can try: 'My lights are out in Brooklyn, New York'\n    * If you need a gardener at your house in New Jersey, you can try: 'I need a gardener at 123 Main St. Lakewood, NJ'\n\n*What I'll do:*\n    * I'll take your request and find the right service type and location.\n    * I'll then send that information to the search engine.\n    * If you do not provide a location, I will return the service type with #Unknown.\n\n_If you would like to sign up to be on our directory, reply 'sign up'._\n\n*Let's find the service you need! Just type your request below.* 😎")
+                    send_whatsapp_message(sender, "Hey there! 👋 Need some help finding a service?\n\nHere's how to use me:\n\n*Tell me what you're looking for:*\n    * Just type in what kind of service you need (like 'plumber,' 'electrician,' 'gardener,' 'handyman' etc.).\n    * I can understand things like 'my sink is leaking' or 'my lights are out.'\n\n*Tell me where you need it:*\n    * Give me a location! You can use:\n        * City and State (e.g., 'Brooklyn, New York')\n        * Zip code (e.g., '11204')\n        * Full address\n    * *Important:* Using a full address will provide the most accurate results.\n\n*Example:*\n    * If you need a plumber in 11204, you can try: 'Broken toilet in 11204'\n    * If you need an electrician in Brooklyn, New York, you can try: 'My lights are out in Brooklyn, New York'\n    * If you need a gardener at your house in New Jersey, you can try: 'I need a gardener at 123 Main St. Lakewood, NJ'\n\n_If you would like to sign up to be on our directory, reply 'sign up'._\n\n*Let's find the service you need! Just type your request below.* 😎")
                 when "sign"
                     send_whatsapp_interactive("🚀 Ready to get more customers? 🚀", "Imagine your business popping up *exactly* when someone needs your service. We make it happen!\n\nPlus, you'll get your own dashboard to keep track of users who found you through our service. 👷🏼‍♂️", "", "Sign Up", "https://192dnsserver.com/sign_up", sender)
-                when "r"
-                    send_whatsapp_message(sender, "\uFF0D\uFF0D\uFF0D\uFF0D\uFF0D\uFF0D \n\n \u2015\u2015\u2015\u2015")
                 else
                     begin
-                        ai_returned = find_correct_trade_ai(message)
-                        puts ai_returned
+                        begin
+                            ai_returned = find_correct_trade_ai(message)
+                        rescue Exception => e
+                            puts "Error with ai parse: #{e}"
+                            send_whatsapp_message(sender, "We're sorry, something went wrong on our end. Please try again later.")
+                            return
+                        end
                         business_type, location = ai_returned.split("#")
-                        if business_type.downcase == "unknown" || location.downcase == "unknown"
-                            send_whatsapp_message(sender, "We're sorry, we couldn't understand your request. Please try again with both the type of servie and a location.")
+                        if business_type.downcase == "unknown" || location.downcase == "unknown" || business_type.nil? || location.nil?
+                            send_whatsapp_message(sender, "We're sorry, we couldn't understand your request. Please try again with _both_ the type of service needed and a location.")
                             return
                         end
                         puts business_type
                         puts location
-                        if business_type.split(" ").size > 1
-                            business_type = business_type.split(" ").join("_")
-                        end
-                        business_type_list = Business.business_types.keys
-                        business_type_index = business_type_list.index(business_type.downcase)
-                        puts business_type_index
-                        location_as_array = location.downcase.split(" ")
-                        location = location_as_array.join(" ")
-                        relevant_businesses = Business.where(business_type: business_type_index)
+                        # business_type_list = Business.business_types.keys
+                        # business_type_index = business_type_list.index(business_type.downcase)
+                        # puts business_type_index
+                        business_type_id = BusinessType.find_or_create_by(name: business_type).id
+                        relevant_businesses = Business.where(business_type: business_type_id)
                         puts relevant_businesses.inspect
                         relevant_businesses = relevant_businesses.select do |business|
-                            Geocoder::Calculations.distance_between(Geocoder.coordinates(location, params: { countrycodes: "us"}), [business.latitude, business.longitude]) <= business.mile_preference
+                            if business.is_stationary
+                                Geocoder::Calculations.distance_between(Geocoder.coordinates(location, params: { countrycodes: "us" }), [ business.latitude, business.longitude ]) <= 15
+                            else
+                                Geocoder::Calculations.distance_between(Geocoder.coordinates(location, params: { countrycodes: "us"}), [ business.latitude, business.longitude ]) <= business.mile_preference if business.mile_preference
+                            end
                         end
                         count = relevant_businesses.size
                         puts count
                         if count == 0
                             send_whatsapp_message(sender, "We're sorry, we couldn't find any such businesses (#{business_type.humanize.capitalize}) near #{location}")
+                            return
                         else
                             send_whatsapp_message(
                                 sender,
                                 "We found #{count} matching #{count == 1 ? "business" : "businesses" } near #{location}!" + "\n\n" + relevant_businesses.map {
-                                    |b| "🏢 *#{ b.name }* \n\n 📞 #{b.contact_url} \n\n ⭐️ #{ b.rating } \n ------------------------- " 
+                                    |b| "🏢 *#{ b.name }* \n\n 🔗 #{b.contact_url} \n\n 📞 #{ format_phone_number(b.phone_number) } \n ------------------------- " 
                                 }.join("\n")
                                 )
+                        end
+                        relevant_businesses.each do |business|
+                            Event.create(business_id: business.id, event_type: 1)
                         end
                         render json: { message: "Message sent" }, status: :ok
                     rescue Exception => e
@@ -161,7 +168,7 @@ class ApiController < ApplicationController
 
                     **Your task is to take the user's input and format it as follows:**
 
-                    `[Business Type]#[Location]`
+                    `[Business Type]#[Location]#your logic to the conclusion in 6 words or less`
 
                     **Here's how to determine each section:**
 
@@ -169,12 +176,13 @@ class ApiController < ApplicationController
 
                     * You will receive a user request that implies a specific type of business.
                     * Use the following list to determine the appropriate business type. If the user request implies a business type not on this list, make your best educated guess from the list.
-                        #{Business.business_types.keys}
+                        #{BusinessType.all.map(&:name)}
 
                     * For example:
                         * 'My sink is leaking' should translate to 'plumber'.
                         * 'Flower planting' should translate to 'gardener'.
                         * 'My roof is leaking' should translate to 'roofer'.
+                        * The user can also directly specify the business type (e.g., 'plumber').
 
                     **2. Location:**
 
@@ -201,16 +209,22 @@ class ApiController < ApplicationController
                     * **Input:** 'I need a welder in 08527'
                     * **Output:** welder#Unknown (if no location is provided)
 
+                    * **Input:** '08527'
+                    * **Output:** Unknown#08527 (if no location is provided)
+
                     * **Input:** 'Where can I get my ac fixed in Boston, Massachusetts'
                     * **Output:** hvace#Boston, Massachusetts
 
-                    **Your response should ONLY be the formatted output: `[business_type]#[Location]`**
+                    * **Input:** 'Welder 11204'
+                    * **Output:** welder#11204
 
-                    *** If one of them are not there, please return 'Unknown' for that field. ***
+                    **Your response CAN ONLY be the formatted output: `business_type#Location#reason`**
 
-                    *** If you are unable to determine the business type or location, please return 'Unknown' for both fields. ***
+                    *** If one of them are not there, please return 'Unknown' for that field, but return the correct output for the other field that was included. ***
 
-                    **** If there is anything other that a business type and/or location, please return 'Unknown' for both fields. ****
+                    *** If you are unable to determine the business type or location, please return 'Unknown' for the corresponding field. ***
+
+                    **** If there is anything other that a business type and location included in the message, please return 'Unknown' for both fields. ****
 
                     Here is the input#{message}"
                 }
@@ -239,6 +253,8 @@ class ApiController < ApplicationController
             url = "sms:#{pn}&Body=Hey,%20I%20heard%20about%20you%20from%20Business%20Directory"
         elsif business.communication_form == "voice"
             url = "tel:#{pn}"
+        elsif business.communication_form == "email"
+            url = "mailto:#{pn}"
         end
         redirect_to url, allow_other_host: true
     end

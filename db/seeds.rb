@@ -7,27 +7,50 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-business_types = [ "electrician", "plumber", "gardener", "painter", "graphic_artist", "handyman", "carpenter", "roofer", "mason", "welder", "hvac", "pest_control", "landscaper", "cleaning_service" ]
-communication_forms = [ "whatsapp", "sms", "voice" ]
-addresses = ["1763 48th street", "65 citadel drive"]
-businesses = []
 
-addresses.each do |address|
-    2.times do
-        businesses << {
-            name: Faker::Company.name,
-            rating: rand(1.0..5.0).round(1),
-            phone_number: "13474601456",
-            business_type: business_types.sample,
-            address: address,
-            city: address == "1763 48th street" ? "Brooklyn" : "Jackson Township",
-            state: address == "1763 48th street" ? "NY" : "NJ",
-            communication_form: communication_forms.sample,
-            mile_preference: rand(1..20),
-        }
-    end
-end
 
-businesses.each do |business|
-    Business.find_or_create_by!(business)
+# business_types = [ "electrician", "plumber", "gardener", "painter", "graphic_artist", "handyman", "carpenter", "roofer", "mason", "welder", "hvac", "pest_control", "landscaper", "cleaning_service" ]
+# communication_forms = [ "whatsapp", "sms", "voice" ]
+# addresses = ["1763 48th street", "65 citadel drive"]
+# businesses = []
+
+# addresses.each do |address|
+#     2.times do
+#         businesses << {
+#             name: Faker::Company.name,
+#             rating: rand(1.0..5.0).round(1),
+#             phone_number: "13474601456",
+#             business_type: business_types.sample,
+#             address: address,
+#             city: address == "1763 48th street" ? "Brooklyn" : "Jackson Township",
+#             state: address == "1763 48th street" ? "NY" : "NJ",
+#             communication_form: communication_forms.sample,
+#             mile_preference: rand(1..20),
+#         }
+#     end
+# end
+
+# businesses.each do |business|
+#     Business.find_or_create_by!(business)
+# end
+
+business_types = [
+    "electrician",
+    "plumber",
+    "gardener",
+    "painter",
+    "graphic_artist",
+    "handyman",
+    "carpenter",
+    "roofer",
+    "mason",
+    "welder",
+    "hvac",
+    "pest_control",
+    "landscaper",
+    "cleaning_service"
+]
+
+business_types.each do |b|
+    BusinessType.find_or_create_by(name: b)
 end

@@ -1,4 +1,5 @@
   <div class="w-full flex flex-col items-center justify-center">
+    <p class="my-10 text-5xl border-b-2">Info</p>
     <div class="w-full max-w-5xl mt-10 flex flex-col md:flex-row md:justify-center">
       <div class="w-full max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-buildings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" /><path d="M16 8h2c1 0 2 1 2 2v11" /><path d="M3 21h18" /><path d="M10 12v0" /><path d="M10 16v0" /><path d="M10 8v0" /><path d="M7 12v0" /><path d="M7 16v0" /><path d="M7 8v0" /><path d="M17 12v0" /><path d="M17 16v0" /></svg>
@@ -21,7 +22,7 @@
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= @business.business_type.humanize %></p>
+          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words"><%= BusinessType.find(@business.business_type).name.humanize %></p>
         </div>
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
@@ -38,8 +39,14 @@
         </div>
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
-          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-route"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z" /><path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" /></svg>
-          <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Would travel <%= @business.mile_preference %> miles</p>
+          <% if !@business.is_stationary %>
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-route"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z" /><path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" /></svg>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Would travel <%= @business.mile_preference %> miles</p>
+          <% else %>
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-route"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z" /><path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" /></svg>
+            <p class="font-normal text-xl sm:text-2xl text-gray-500 dark:text-gray-400 break-words">Does not travel</p>
+          <% end %>
+
         </div>
 
         <div class="flex flex-row md:flex-nowrap flex-wrap gap-1 items-center mb-4">
@@ -53,10 +60,19 @@
         </a>
       </div>
     </div>
-
-    <div class="w-full mt-10">
-      <p class="text-center text-lg">Here is your breakdown of clicks by day</p>
+    <p class="my-10 text-5xl border-b-2">Stats</p>
+    <div class="md:w-6xl w-full border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mx-auto">
+      <p class="text-center text-2xl p-4">Here is your breakdown of clicks by day</p>
       <% clicks = Event.where(business_id: @business.id, event_type: 0) %>
       <%= area_chart clicks.group_by_day(:created_at, range: 1.week.ago..Date.today).count, min: 0, max: 10, colors: ["#3377ff"] %>
     </div>
-  </div>
+    <div class="md:w-6xl w-full mt-10 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <p class="text-center text-2xl p-4">Here is your breakdown of views by day</p>
+      <% views = Event.where(business_id: @business.id, event_type: 1) %>
+      <%= area_chart views.group_by_day(:created_at, range: 1.week.ago..Date.today).count, min: 0, max: 10, colors: ["#3377ff"] %>
+    </div>
+    <p class="my-10 text-2xl text-red-500 border-b-2">Danger Zone</p>
+    <div class="md:w-6xl w-full border mb-10 p-10 border-red-500 flex items-center justify-center rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <%= link_to "Delete account", business_path,  data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete your account?" },  class: "focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" %>
+    </div>
+  </div
