@@ -22,7 +22,8 @@ class ApiController < ApplicationController
                 first_word = message.split(" ").first.downcase
                 case first_word
                 when "hi", "hello", "hey"
-                    send_whatsapp_message(sender, "👋 *Welcome to Business Directory!*\n\nUse this bot to find local businesses. For example, 'plumber brooklyn ny', or 'electrician in 08527' \n\n _You can always reply 'help' for instructions._ ")
+                    send_whatsapp_message(sender, "👋 *Welcome to Business Directory!*\n\nUse this bot to find local businesses. For example, 'plumber brooklyn ny', or 'electrician in 08527' \n\n _You can always reply 'help' for instructions._  \n\n _Save our contact for best results (experts say)_")
+                    send_our_contact(sender)
                     render json: { message: "Message sent" }, status: :ok
                 when "help"
                     send_whatsapp_message(sender, "Hey there! 👋 Need some help finding a service?\n\nHere's how to use me:\n\n*Tell me what you're looking for:*\n    * Just type in what kind of service you need (like 'plumber,' 'electrician,' 'gardener,' 'handyman' etc.).\n    * I can understand things like 'my sink is leaking' or 'my lights are out.'\n\n*Tell me where you need it:*\n    * Give me a location! You can use:\n        * City and State (e.g., 'Brooklyn, New York')\n        * Zip code (e.g., '11204')\n        * Full address\n    * *Important:* Using a full address will provide the most accurate results.\n\n*Example:*\n    * If you need a plumber in 11204, you can try: 'Broken toilet in 11204'\n    * If you need an electrician in Brooklyn, New York, you can try: 'My lights are out in Brooklyn, New York'\n    * If you need a gardener at your house in New Jersey, you can try: 'I need a gardener at 123 Main St. Lakewood, NJ'\n\n_If you would like to sign up to be on our directory, reply 'sign up'._\n\n*Let's find the service you need! Just type your request below.* 😎")
@@ -129,6 +130,26 @@ class ApiController < ApplicationController
             interactive: interactive_reply_buttons
         )
     end
+
+    def send_our_contact(sender)
+        contact = {
+            "name": {
+                "formatted_name": "WA_BOT",
+                "first_name": "WA",
+                "last_name": "Bot"
+            },
+            "phones": [
+                {
+                    "phone": "+15162311823",
+                    "type": "mobile",
+                    "wa_id": "15162311823"
+                }
+            ]
+        }
+        client = WhatsappSdk::Api::Client.new
+        client.messages.send_contacts(sender_id: ENV.fetch("PHONE_NUMBER_ID"), recipient_number: sender, contacts_json: [ contact ])
+    end
+
 
     def send_whatsapp_interactive(header_text, text, footer_text, button_text, button_url, sender)
         client = WhatsappSdk::Api::Client.new

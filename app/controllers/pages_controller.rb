@@ -1,10 +1,5 @@
 class PagesController < ApplicationController
     def index
-        if current_business
-            redirect_to business_path(current_business)
-        else
-            render :index
-        end
     end
 
     def contact
@@ -20,7 +15,7 @@ class PagesController < ApplicationController
             END:VCARD
         VCARD
 
-        send_data vcard, filename: "contact.vcf", type: "text/vcf" and return
+        send_data vcard, filename: "contact.vcf", type: "text/vcf"
     end
 
     def about

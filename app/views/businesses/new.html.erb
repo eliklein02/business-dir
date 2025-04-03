@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class=" border-black border-1 mt-10 rounded-lg p-10">
-      <p class="text-gray-900 text-lg text-center mb-6">Personal Details</p>
+        <p class="text-gray-900 text-lg text-center mb-6">Personal Details</p>
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <% options = [["Choose how you communicate ▼", "", {disabled: true, selected: true}]] + Business.communication_forms.keys.map{ |c| [c.humanize, c]} %>
           <%= f.select :communication_form, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-md text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
@@ -57,25 +57,31 @@
       </div>
 
       <div class="border-black border-1 mt-10 rounded-lg p-10">
-      <p class="text-gray-900 text-lg text-center mb-2">Travel Details</p>
-      <p class="text-gray-600 text-sm mb-6">If you are a business that does not travel, leave the mile preferenece empty, and check the box. <br>We will attempt to match you to customers in your general area (15 miles).</p>
+        <p class="text-gray-900 text-lg text-center mb-2">Travel Details</p>
+        <p class="text-gray-600 text-sm mb-6">If you are a business that does not travel, leave the mile preferenece empty, and check the box. <br>We will attempt to match you to customers in your general area (15 miles).</p>
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-          <%= f.number_field :mile_preference, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+          <%= f.number_field :mile_preference, class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer", id: "mile_travel_input" %>
           <%= f.label "How many miles would you travel?", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.label :is_stationary, "Are you stationary?", class: "block mb-2 text-sm text-gray-500 dark:text-gray-400" %>
-          <%= f.check_box :is_stationary, class: "block py-2.5 px-0 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+          <%= f.check_box :is_stationary, class: "block py-2.5 px-0 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer", id: "stationary_box" %>
         </div>
       </div>
 
       <div class="border-black border-1 mt-10 rounded-lg p-10">
-      <p class="text-gray-900 text-lg text-center mb-6">Business Details</p>
+        <p class="text-gray-900 text-lg text-center mb-6">Business Details</p>
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-          <% options = [["Choose a business type ▼", "", {disabled: true, selected: true}]] + BusinessType.order(:name).map { |t| [t.name.humanize, t.id] } %>
-          <%= f.select :business_type, options_for_select(options), {}, class: "block py-2.5 px-0 w-full text-md text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" %>
+          <%= f.text_field :business_type, placeholder: "Start typing your business type (or other)...", list: "dl", class: "block py-2.5 px-0 text-sm text-gray-900 w-full appearance-none bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer", id: "business_type_field" %>
+          <% business_types = BusinessType.order(:name).map(&:name) %>
+          <datalist id="dl">
+            <% business_types.each do |b| %>
+              <option value="<%= b.humanize %>" />
+            <% end %>
+          </datalist>
         </div>
+
 
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
@@ -84,7 +90,7 @@
         </div>
 
         <div class="relative z-0 w-full mb-5 group" id="div_to_show" style="margin-bottom: 20px; display: none;">
-          <%= f.text_area :other, class: "block py-2.5 px-0 text-sm text-gray-900 w-full appearance-none bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+          <%= f.text_area :other, class: "block py-2.5 px-0 text-sm text-gray-900 w-full appearance-none bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer", id: "alt_business_type" %>
           <%= f.label "Please describe what you do", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
       </div>
@@ -96,12 +102,51 @@
 
 <script>
     let check_box = document.getElementById("check_box")
+    let business_type_field = document.getElementById("business_type_field")
     let div_to_show = document.getElementById("div_to_show")
+    let mile_travel_input = document.getElementById("mile_travel_input")
+    let stationary_box = document.getElementById("stationary_box")
+    let alt_business_type = document.getElementById("alt_business_type")
+
+
     check_box.addEventListener("click", () => {
       if (check_box.checked) {
         div_to_show.style.display = "block"
+        business_type_field.value = ""
+        business_type_field.disabled = true
       } else {
+        business_type_field.disabled = false
         div_to_show.style.display = "none";
+        alt_business_type.value = ""
       }
     })
+
+    stationary_box.addEventListener("click", () =>  {
+      if (stationary_box.checked == true) {
+        mile_travel_input.value = ""
+        mile_travel_input.disabled = true
+      } else {
+        mile_travel_input.disabled = false
+      }
+    })
+
+    mile_travel_input.addEventListener("input", () =>  {
+      if (mile_travel_input.value !== "") {
+        stationary_box.disabled = true
+        stationary_box.checked = false
+      } else {
+        stationary_box.disabled = false
+      }
+    })
+
+    business_type_field.addEventListener("input", () => {
+      if (business_type_field.value != "") {
+        check_box.disabled = true
+        check_box.checked = false
+      } else {
+        check_box.disabled = false
+      }
+    })
+
+
 </script>

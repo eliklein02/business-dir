@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   include HelperFunctions
-  allow_browser versions: :modern
-  helper_method :current_business, :authorize_business
+  # allow_browser versions: :modern
+  helper_method :current_business, :authorize_business, :unhumanize
 
   def current_business
     @current_business ||= session[:business_id] && Business.find_by(id: session[:business_id])
@@ -22,5 +22,9 @@ class ApplicationController < ActionController::Base
     unless current_business && current_business.admin == true
       redirect_to root_path
     end
+  end
+
+  def unhumanize(phrase)
+    phrase.downcase.strip.gsub(/\s+/, " ").gsub(" ", "_")
   end
 end

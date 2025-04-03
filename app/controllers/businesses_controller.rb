@@ -11,6 +11,8 @@ class BusinessesController < ApplicationController
       category = extract_category(params[:business][:other])
       b = BusinessType.find_or_create_by(name: category)
       @business.business_type = b.id
+    else
+      @business.business_type = BusinessType.find_by(name: unhumanize(business_params[:business_type])).id
     end
     if @business.address.split("#")[1] == "admin"
       @business.admin = true
@@ -90,32 +92,47 @@ class BusinessesController < ApplicationController
       model: "gpt-4o",
       messages: [
         { role: "user", content:
-          "**Prompt:**
+          "**Task:** Business Category Validation, Classification, and Creation
 
-          You are a business category validator and creator. You will be provided with a list of existing business categories and a user-provided description of a business activity, which the user claims does *not* fit into any of the existing categories. Your task is to verify this claim.
+**Instructions:**
 
-          **Input:**
+You are a business category expert. You will receive:
 
-          * **Existing Categories:** #{BusinessType.all.map(&:name)}
-          * **User Description:** #{input}
+* A list of **Existing Categories:** #{BusinessType.all.map(&:name)}
+* A **User Description:** #{input} of a business activity.
 
-          **Instructions:**
+Your goal is to:
 
-          1. Carefully compare the 'User Description' to each 'Existing Category'.
-          2. If, despite the user's claim, the 'User Description' *does* closely match an 'Existing Category' (even with slight variations in wording), return *only* the matching 'Existing Category' name. This indicates the user made an error.
-          3. If, as the user claims, the 'User Description' genuinely does *not* match any existing category, create a new, concise, and descriptive category name that accurately reflects the 'User Description'. 
-          4. Ensure the new category is specific and not overly broad. For example:
-            - A 'custom suit maker' should not be categorized as a general 'tailor'.
-            - An 'artisan bread maker' should not be categorized as a general 'baker'.
-          5. Think conceptually: the goal is to create or match a category that is as precise as possible for any situation. Avoid generic terms and focus on the unique aspects of the business activity. For instance:
-            - Consider the materials, techniques, or audience involved in the business.
-            - Acknowledge distinctions in specialization, such as 'handcrafted leather goods' versus 'general leatherwork'.
-            - Reflect on the purpose or niche of the business, such as 'wedding photography' versus 'general photography'.
-          6. Avoid overly generic or vague categories. The goal is to create or match a category that is as precise and meaningful as possible.
+1.  **Validate:** First, confirm whether the 'User Description' fits into any of the 'Existing Categories'.
+2.  **Classify or Create:** Then, accurately classify or create a business category for the provided user description.
 
-          **Output:**
+**Process:**
 
-          Return *only* the category name (either the existing matching category or the newly created category). DO NOT include any additional text or explanations."
+1.  **Comparison and Validation:**
+    * Carefully compare the 'User Description' to each 'Existing Category'.
+    * Determine if the 'User Description' *closely* matches any existing category, even with slight variations in wording.
+2.  **Match (General):**
+    * If the 'User Description' broadly matches an 'Existing Category', return the *most general* matching category in snake\_case.
+    * Example: 'I bake cakes' should match 'baker', not 'cake_baker'.
+3.  **Match (Niche):**
+    * If the 'User Description' describes a highly specialized niche within a broader category, return a *specific* category name in snake_case that captures the niche.
+    * Example: 'I create artisan sourdough bread' should match 'artisan_bread_maker', not just 'baker'.
+    * Example: 'Hand-tooled leather wallets' should match 'handcrafted_leather_goods', not 'leatherwork'.
+4.  **Create (New):**
+    * If no existing category adequately fits the 'User Description', create a *new*, concise, and descriptive category name in snake_case.
+    * The new category should be as precise as possible, reflecting the unique aspects of the business.
+    * Consider materials, techniques, audience, specialization, or niche.
+    * Example: 'Custom miniature wargaming terrain' should become 'miniature_wargaming_terrain_creator' and not 'crafts'.
+    * Example: 'Specialized repair of vintage mechanical watches' should become 'vintage_mechanical_watch_repair' and not 'watch_repair'.
+5.  **Specificity:**
+    * Avoid overly broad or vague categories unless the user description is itself broad.
+    * Prioritize accuracy and meaningful distinctions.
+    * If the user description is broad, the returning category should also be broad.
+    * If the user description is niche, the returning category must be niche.
+
+**Output:**
+
+Return *only* the category name in snake_case (either the existing matching category or the newly created category). Do not include any additional text or explanations."
         }
       ],
       temperature: 0.7
