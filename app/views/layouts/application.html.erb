@@ -6,6 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"></script>
 
     <%= yield :head %>
 
@@ -19,6 +21,13 @@
   </head>
 
   <body>
+    <div class="flash-container">
+      <% flash.each do |type, message| %>
+        <div class="flash-message <%= type %>">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
     <main class="container mx-auto px-5 flex flex-col">
       <%= render 'layouts/shared/navbar' %>
       <%= yield %>

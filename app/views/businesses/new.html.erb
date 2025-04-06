@@ -1,39 +1,29 @@
 <div class="container">
-    <p class="text-5xl text-center">Join our community!</p>
-    <% if @business.errors.any? %>
-      <div id="error_explanation" class="text-center">
-        <h2><%= pluralize(@business.errors.count, "error") %> prohibited this business from being saved:</h2>
-        <ul>
-          <% @business.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <p class="text-4xl text-center">Sign Up</p>
     <%= form_with(model: @business, local: true, data: { turbo: false }, html: { class: "max-w-md mx-auto" }) do |f| %>
       <div class=" border-black border-1 mt-10 rounded-lg p-10">
         <p class="text-gray-900 text-lg text-center mb-6">Account Details</p>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.text_field :name, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :name, "Name/Business Name", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
-          <p class="text-sm text-gray-700 mt-2 ">This name is what potential customers will see</p>
+          <%= f.label :name, "Name/Business Name", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <p class="text-sm text-gray-900 mt-2 ">This name is what potential customers will see.</p>
         </div>
 
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-          <%= f.text_field :phone_number, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :phone_number, "Phone Number", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.text_field :phone_number, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-yellow-200 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+          <%= f.label :phone_number, "Phone Number", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.password_field :password, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :password, "Password", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.label :password, "Password", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.password_field :password_confirmation, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :password_confirmation, "Confirm Password", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.label :password_confirmation, "Confirm Password", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
       </div>
       <div class=" border-black border-1 mt-10 rounded-lg p-10">
@@ -44,18 +34,18 @@
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
-          <%= f.password_field :address, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :address, "Address", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.text_field :address, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+          <%= f.label :address, "Address", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.text_field :city, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :city, "City", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.label :city, "City", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <%= f.text_field :state, placeholder: " ", autocomplete: "off", class: "block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none autofill:bg-transparent dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
-          <%= f.label :state, "State", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-20 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
+          <%= f.label :state, "State", class: "peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-1000 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" %>
         </div>
 
       </div>
@@ -74,6 +64,7 @@
         </div>
       </div>
 
+<!--
       <div class="border-black border-1 mt-10 rounded-lg p-10">
         <p class="text-gray-900 text-lg text-center mb-6">Business Details</p>
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
@@ -85,8 +76,12 @@
             <% end %>
           </datalist>
         </div>
-
-
+--> 
+      <div class="border-black border-1 mt-10 rounded-lg p-10">
+        <p class="text-gray-900 text-lg text-center mb-6">Business Details</p>
+        <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
+          <%= f.text_field :business_type, placeholder: "Start typing your business type (or other)...", class: "block py-2.5 px-0 text-sm text-gray-900 w-full appearance-none bg-transparent border-0 border-b-2 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer awesomplete", id: "business_type_field", data: { list: BusinessType.order(:name).map(&:name).join(",") } %>
+        </div>
 
         <div class="relative z-0 w-full mb-5 group" style="margin-bottom: 20px;">
           <label class="block mb-2 text-sm text-gray-500 dark:text-gray-400">Other?</label>
@@ -99,7 +94,7 @@
         </div>
       </div>
 
-      <%= f.submit 'Submit', class: "my-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+      <%= f.submit 'Join', class: "my-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
 
     <% end %>
 </div>
@@ -151,5 +146,12 @@
         check_box.disabled = false
       }
     })
+
+    const input = document.getElementById("business_type_field");
+    new Awesomplete(input, {
+      list: input.dataset.list.split(","),
+      minChars: 1,
+      autoFirst: true,
+    });
     
 </script>

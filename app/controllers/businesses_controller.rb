@@ -6,26 +6,35 @@ class BusinessesController < ApplicationController
   end
 
   def create
-    @business = Business.new(business_params)
-    if params[:business][:other] != ""
-      category = extract_category(params[:business][:other])
-      b = BusinessType.find_or_create_by(name: category)
-      @business.business_type = b.id
-    else
-      @business.business_type = BusinessType.find_by(name: unhumanize(business_params[:business_type])).id
+    begin
+      @business = Business.new(business_params)
+      if params[:business][:other] != ""
+        category = extract_category(params[:business][:other])
+        b = BusinessType.find_or_create_by(name: category)
+        @business.business_type = b.id
+      else
+        @business.business_type = BusinessType.find_by(name: unhumanize(business_params[:business_type])).id
+      end
+      if @business.address.split("#")[1] == "admin"
+        @business.admin = true
+      end
+      if @business.city.strip == "Jackson" || @business.city.strip == "jackson"
+        @business.city = "Jackson Township"
+      end
+      @business.phone_number = strip_phone_number(@business.phone_number)
+    rescue StandardError => e
+      puts "Error in business creation: #{e.message}"
+      flash[:alert] = "Business not created successfully, please make sure you filled out all the fields."
+      render :new and return
     end
-    if @business.address.split("#")[1] == "admin"
-      @business.admin = true
-    end
-    if @business.city.strip == "Jackson" || @business.city.strip == "jackson"
-      @business.city = "Jackson Township"
-    end
-    @business.phone_number = strip_phone_number(@business.phone_number)
     if @business.save
       session[:business_id] = @business.id
+      flash[:notice] = "Business created successfully"
       redirect_to @business, notice: "Business added"
     else
-      puts @business.errors.full_messages
+      @business.errors.full_messages.each do |error|
+        flash[:alert] = error
+      end
       render :new
     end
   end
