@@ -80,6 +80,6 @@ gem "tailwindcss-rails", "~> 4.2"
 
 gem "chartkick", "~> 5.1"
 
-gem "groupdate", "~> 6.5"
+gem "groupdate", "~> 6.6"
 
 # gem "devise", "~> 4.9"
