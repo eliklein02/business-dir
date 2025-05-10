@@ -68,7 +68,7 @@ gem "geocoder", "~> 1.8"
 
 gem "ruby-openai", "~> 7.4"
 
-gem "httparty", "~> 0.22.0"
+gem "httparty", "~> 0.23.1"
 
 
 
